@@ -1,12 +1,81 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { MOCK_ROADS, DEPARTMENTS, MOCK_GOVERNORATES } from '../constants';
 import { Road } from '../types';
 
+declare const L: any; // Declare Leaflet global
+
+const MapModal: React.FC<{ road: Road, onClose: () => void }> = ({ road, onClose }) => {
+  const mapRef = useRef<any>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Wait for the modal animation/render to stabilize
+    const timeout = setTimeout(() => {
+      const startLat = parseFloat(road.startN);
+      const startLng = parseFloat(road.startE);
+      const endLat = parseFloat(road.endN);
+      const endLng = parseFloat(road.endE);
+
+      // Initialize Map centered between points or at start
+      mapRef.current = L.map('map').setView([startLat, startLng], 10);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(mapRef.current);
+
+      // Add markers
+      const startMarker = L.marker([startLat, startLng]).addTo(mapRef.current)
+        .bindPopup(`<b>بداية الطريق:</b> ${road.start}`)
+        .openPopup();
+
+      const endMarker = L.marker([endLat, endLng]).addTo(mapRef.current)
+        .bindPopup(`<b>نهاية الطريق:</b> ${road.end}`);
+
+      // Draw a line between points if both exist
+      if (!isNaN(startLat) && !isNaN(endLat)) {
+        const polyline = L.polyline([
+          [startLat, startLng],
+          [endLat, endLng]
+        ], { color: 'blue' }).addTo(mapRef.current);
+        
+        // Adjust map to fit both markers
+        mapRef.current.fitBounds(polyline.getBounds(), { padding: [50, 50] });
+      }
+    }, 100);
+
+    return () => {
+      clearTimeout(timeout);
+      if (mapRef.current) {
+        mapRef.current.remove();
+      }
+    };
+  }, [road]);
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
+      <div className="bg-white w-full max-w-4xl rounded-lg shadow-xl overflow-hidden flex flex-col h-[80vh]">
+        <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-[#337ab7] text-white">
+          <h3 className="font-bold text-lg">موقع الطريق: {road.name}</h3>
+          <button onClick={onClose} className="hover:text-gray-200 text-2xl font-bold">&times;</button>
+        </div>
+        <div id="map" ref={containerRef} className="flex-1 bg-gray-100"></div>
+        <div className="p-4 bg-gray-50 text-xs text-gray-500 border-t flex justify-between">
+          <div>البداية: {road.startN}, {road.startE}</div>
+          <div>النهاية: {road.endN}, {road.endE}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const RoadsList: React.FC = () => {
   const [roads, setRoads] = useState<Road[]>(MOCK_ROADS);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedRoadForMap, setSelectedRoadForMap] = useState<Road | null>(null);
 
   const handleDelete = (id: number) => {
     if (window.confirm('هل أنت متأكد أنك تريد حذف هذا الطريق؟')) {
@@ -68,6 +137,7 @@ const RoadsList: React.FC = () => {
               <th className="p-2 border border-gray-400">بداية الطريق</th>
               <th className="p-2 border border-gray-400">نهاية الطريق</th>
               <th className="p-2 border border-gray-400">لينك جوجل ماب</th>
+              <th className="p-2 border border-gray-400">خريطة</th>
               <th className="p-2 border border-gray-400">طول الطريق</th>
               <th className="p-2 border border-gray-400">اضافة صيانة</th>
               <th className="p-2 border border-gray-400">نوع الاجراء</th>
@@ -87,6 +157,15 @@ const RoadsList: React.FC = () => {
                 <td className="p-2 border border-gray-200">{road.end}</td>
                 <td className="p-2 border border-gray-200 text-blue-600 underline">
                   <a href={road.mapLink} target="_blank" rel="noopener noreferrer">لينك</a>
+                </td>
+                <td className="p-2 border border-gray-200">
+                  <button 
+                    onClick={() => setSelectedRoadForMap(road)}
+                    className="bg-emerald-500 text-white px-2 py-1 rounded hover:bg-emerald-600 transition-colors shadow-sm"
+                    title="عرض الموقع على الخريطة"
+                  >
+                    <i className="fa fa-map-marked-alt"></i>
+                  </button>
                 </td>
                 <td className="p-2 border border-gray-200">{road.length}</td>
                 <td className="p-2 border border-gray-200">
@@ -124,6 +203,13 @@ const RoadsList: React.FC = () => {
           <button className="px-3 py-1 border border-gray-300 bg-white hover:bg-gray-100 text-sm">التالي</button>
         </nav>
       </div>
+
+      {selectedRoadForMap && (
+        <MapModal 
+          road={selectedRoadForMap} 
+          onClose={() => setSelectedRoadForMap(null)} 
+        />
+      )}
     </div>
   );
 };
