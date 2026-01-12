@@ -6,6 +6,107 @@ import { Road } from '../types';
 
 declare const L: any; // Declare Leaflet global
 
+const RoadDetailsModal: React.FC<{ road: Road, onClose: () => void }> = ({ road, onClose }) => {
+  const DetailRow = ({ label, value, fullWidth = false }: { label: string, value: any, fullWidth?: boolean }) => (
+    <div className={`${fullWidth ? 'col-span-full' : 'col-span-1'} flex flex-col border-b border-gray-100 pb-2`}>
+      <span className="text-[10px] text-gray-400 font-bold mb-1">{label}</span>
+      <span className="text-sm text-gray-800 font-medium">{value ?? '-'}</span>
+    </div>
+  );
+
+  return (
+    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+      <div className="bg-white w-full max-w-4xl rounded-sm shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-[#2A3F54] text-white">
+          <div className="flex items-center gap-3">
+            <i className="fa fa-info-circle text-emerald-400 text-xl"></i>
+            <h3 className="font-bold text-lg tracking-wide">تفاصيل بيانات الطريق: {road.name}</h3>
+          </div>
+          <button onClick={onClose} className="hover:rotate-90 transition-transform duration-200 text-2xl font-bold">&times;</button>
+        </div>
+        
+        <div className="flex-1 overflow-y-auto p-6 space-y-8">
+          {/* Section: Basic & Admin */}
+          <section>
+            <h4 className="text-xs font-bold text-blue-700 mb-4 border-r-4 border-blue-600 pr-2 uppercase">البيانات الإدارية</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <DetailRow label="اسم الطريق" value={road.name} />
+              <DetailRow label="المنطقة" value={road.department} />
+              <DetailRow label="المحافظة" value={road.governorate} />
+              <DetailRow label="garb_id" value={road.garbId} />
+              <DetailRow label="جهة الولاية" value={road.jurisdiction || 'الهيئة العامة للطرق والكباري'} />
+              <DetailRow label="طول الطريق (كم)" value={<span className="text-emerald-600 font-bold">{road.length}</span>} />
+            </div>
+          </section>
+
+          {/* Section: Infrastructure */}
+          <section className="bg-gray-50 p-4 rounded-sm border border-gray-100">
+            <h4 className="text-xs font-bold text-blue-700 mb-4 border-r-4 border-blue-600 pr-2 uppercase">بيانات البنية التحتية</h4>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <DetailRow label="نوع الطريق" value={road.type} />
+              <DetailRow label="تصنيف السرعة" value={road.speed} />
+              <DetailRow label="السرعة المقررة" value={road.numericSpeed ? `${road.numericSpeed} كم/س` : '-'} />
+              <DetailRow label="طبيعة الطريق" value={road.nature} />
+              <DetailRow label="نوع الرصف" value={road.pavementType} />
+              <DetailRow label="فاصل الحركة" value={road.separatorType} />
+              <DetailRow label="عدد الحارات" value={road.lanesCount} />
+              <DetailRow label="بداية المنطقة (كم)" value={road.startAreaKm} />
+              <DetailRow label="نهاية المنطقة (كم)" value={road.endAreaKm} />
+            </div>
+          </section>
+
+          {/* Section: Dimensions */}
+          <section>
+            <h4 className="text-xs font-bold text-blue-700 mb-4 border-r-4 border-blue-600 pr-2 uppercase">الأبعاد والمقاييس</h4>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <DetailRow label="عرض الطريق (م)" value={road.roadWidth} />
+              <DetailRow label="عرض الجزيرة (م)" value={road.medianWidth} />
+              <DetailRow label="عرض الرصيف (م)" value={road.sidewalkWidth} />
+              <DetailRow label="حد الملكية (Buffer)" value={road.bufferLimit} />
+            </div>
+          </section>
+
+          {/* Section: Location */}
+          <section className="bg-emerald-50/30 p-4 rounded-sm border border-emerald-100/50">
+            <h4 className="text-xs font-bold text-emerald-800 mb-4 border-r-4 border-emerald-600 pr-2 uppercase">الموقع الجغرافي</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+              <div className="space-y-3">
+                <DetailRow label="نقطة البداية" value={road.start} />
+                <div className="grid grid-cols-2 gap-4">
+                  <DetailRow label="E (بداية)" value={road.startE} />
+                  <DetailRow label="N (بداية)" value={road.startN} />
+                </div>
+              </div>
+              <div className="space-y-3">
+                <DetailRow label="نقطة النهاية" value={road.end} />
+                <div className="grid grid-cols-2 gap-4">
+                  <DetailRow label="E (نهاية)" value={road.endE} />
+                  <DetailRow label="N (نهاية)" value={road.endN} />
+                </div>
+              </div>
+              <DetailRow label="رابط جوجل ماب" fullWidth value={<a href={road.mapLink} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline flex items-center gap-2"><i className="fa fa-external-link-alt text-xs"></i> عرض على الخريطة الخارجية</a>} />
+            </div>
+          </section>
+
+          {/* Section: Notes */}
+          <section>
+             <DetailRow label="ملاحظات اضافية" fullWidth value={road.notes || 'لا توجد ملاحظات'} />
+          </section>
+        </div>
+        
+        <div className="p-4 bg-gray-50 border-t flex justify-end">
+          <button 
+            onClick={onClose}
+            className="bg-[#2A3F54] text-white px-8 py-2 text-sm font-bold hover:bg-slate-700 transition-colors"
+          >
+            إغلاق
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const MapModal: React.FC<{ road: Road, onClose: () => void }> = ({ road, onClose }) => {
   const mapRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -13,36 +114,31 @@ const MapModal: React.FC<{ road: Road, onClose: () => void }> = ({ road, onClose
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Wait for the modal animation/render to stabilize
     const timeout = setTimeout(() => {
       const startLat = parseFloat(road.startN);
       const startLng = parseFloat(road.startE);
       const endLat = parseFloat(road.endN);
       const endLng = parseFloat(road.endE);
 
-      // Initialize Map centered between points or at start
       mapRef.current = L.map('map').setView([startLat, startLng], 10);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
       }).addTo(mapRef.current);
 
-      // Add markers
-      const startMarker = L.marker([startLat, startLng]).addTo(mapRef.current)
+      L.marker([startLat, startLng]).addTo(mapRef.current)
         .bindPopup(`<b>بداية الطريق:</b> ${road.start}`)
         .openPopup();
 
-      const endMarker = L.marker([endLat, endLng]).addTo(mapRef.current)
+      L.marker([endLat, endLng]).addTo(mapRef.current)
         .bindPopup(`<b>نهاية الطريق:</b> ${road.end}`);
 
-      // Draw a line between points if both exist
       if (!isNaN(startLat) && !isNaN(endLat)) {
         const polyline = L.polyline([
           [startLat, startLng],
           [endLat, endLng]
         ], { color: 'blue' }).addTo(mapRef.current);
         
-        // Adjust map to fit both markers
         mapRef.current.fitBounds(polyline.getBounds(), { padding: [50, 50] });
       }
     }, 100);
@@ -76,6 +172,7 @@ const RoadsList: React.FC = () => {
   const [roads, setRoads] = useState<Road[]>(MOCK_ROADS);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRoadForMap, setSelectedRoadForMap] = useState<Road | null>(null);
+  const [selectedRoadForDetails, setSelectedRoadForDetails] = useState<Road | null>(null);
 
   const handleDelete = (id: number) => {
     if (window.confirm('هل أنت متأكد أنك تريد حذف هذا الطريق؟')) {
@@ -126,59 +223,63 @@ const RoadsList: React.FC = () => {
       <div className="overflow-x-auto bg-white border border-gray-200 shadow-sm">
         <table className="w-full text-center border-collapse">
           <thead>
-            <tr className="bg-[#337ab7] text-white text-xs font-bold">
+            <tr className="bg-[#337ab7] text-white text-[10px] font-bold">
               <th className="p-2 border border-gray-400">م</th>
               <th className="p-2 border border-gray-400">اسم الطريق</th>
               <th className="p-2 border border-gray-400">اسم المنطقة</th>
               <th className="p-2 border border-gray-400">المحافظة</th>
               <th className="p-2 border border-gray-400">نوع الطريق</th>
-              <th className="p-2 border border-gray-400">سرعة الطريق</th>
-              <th className="p-2 border border-gray-400">طبيعة الطريق</th>
-              <th className="p-2 border border-gray-400">بداية الطريق</th>
-              <th className="p-2 border border-gray-400">نهاية الطريق</th>
-              <th className="p-2 border border-gray-400">لينك جوجل ماب</th>
-              <th className="p-2 border border-gray-400">خريطة</th>
               <th className="p-2 border border-gray-400">طول الطريق</th>
-              <th className="p-2 border border-gray-400">اضافة صيانة</th>
-              <th className="p-2 border border-gray-400">نوع الاجراء</th>
+              <th className="p-2 border border-gray-400">بداية الكم</th>
+              <th className="p-2 border border-gray-400">نهاية الكم</th>
+              <th className="p-2 border border-gray-400">garb_id</th>
+              <th className="p-2 border border-gray-400">السرعة</th>
+              <th className="p-2 border border-gray-400">الرصف</th>
+              <th className="p-2 border border-gray-400">عرض الطريق</th>
+              <th className="p-2 border border-gray-400">الحارات</th>
+              <th className="p-2 border border-gray-400">خريطة</th>
+              <th className="p-2 border border-gray-400">اجراء</th>
             </tr>
           </thead>
-          <tbody className="text-xs text-gray-700">
+          <tbody className="text-[10px] text-gray-700">
             {roads.map((road, index) => (
               <tr key={road.id} className="hover:bg-gray-50 even:bg-gray-50">
                 <td className="p-2 border border-gray-200">{index + 1}</td>
-                <td className="p-2 border border-gray-200 font-bold">{road.name}</td>
-                <td className="p-2 border border-gray-200">{road.department}</td>
+                <td className="p-2 border border-gray-200 font-bold whitespace-nowrap">{road.name}</td>
+                <td className="p-2 border border-gray-200 whitespace-nowrap">{road.department}</td>
                 <td className="p-2 border border-gray-200">{road.governorate}</td>
                 <td className="p-2 border border-gray-200">{road.type}</td>
-                <td className="p-2 border border-gray-200">{road.speed}</td>
-                <td className="p-2 border border-gray-200">{road.nature}</td>
-                <td className="p-2 border border-gray-200">{road.start}</td>
-                <td className="p-2 border border-gray-200">{road.end}</td>
-                <td className="p-2 border border-gray-200 text-blue-600 underline">
-                  <a href={road.mapLink} target="_blank" rel="noopener noreferrer">لينك</a>
-                </td>
+                <td className="p-2 border border-gray-200 font-bold">{road.length}</td>
+                <td className="p-2 border border-gray-200">{road.startAreaKm ?? '-'}</td>
+                <td className="p-2 border border-gray-200">{road.endAreaKm ?? '-'}</td>
+                <td className="p-2 border border-gray-200">{road.garbId ?? '-'}</td>
+                <td className="p-2 border border-gray-200">{road.numericSpeed ?? '-'}</td>
+                <td className="p-2 border border-gray-200">{road.pavementType ?? '-'}</td>
+                <td className="p-2 border border-gray-200">{road.roadWidth ?? '-'}</td>
+                <td className="p-2 border border-gray-200">{road.lanesCount ?? '-'}</td>
                 <td className="p-2 border border-gray-200">
                   <button 
                     onClick={() => setSelectedRoadForMap(road)}
-                    className="bg-emerald-500 text-white px-2 py-1 rounded hover:bg-emerald-600 transition-colors shadow-sm"
+                    className="bg-emerald-500 text-white p-1 rounded hover:bg-emerald-600 transition-colors shadow-sm"
                     title="عرض الموقع على الخريطة"
                   >
                     <i className="fa fa-map-marked-alt"></i>
                   </button>
                 </td>
-                <td className="p-2 border border-gray-200">{road.length}</td>
                 <td className="p-2 border border-gray-200">
-                  <Link to={`/maintenance/add?roadId=${road.id}`} className="text-blue-500 hover:text-blue-700">
-                    <i className="fa fa-pencil-alt"></i>
-                  </Link>
-                </td>
-                <td className="p-2 border border-gray-200">
-                  <div className="flex flex-col items-center gap-2">
-                    <Link to={`/roads/edit/${road.id}`} className="text-blue-500 hover:text-blue-700" title="تعديل">
+                  <div className="flex gap-2 justify-center">
+                    <button 
+                      onClick={() => setSelectedRoadForDetails(road)}
+                      className="text-blue-500 hover:text-blue-700 transition-colors" 
+                      title="عرض التفاصيل الكاملة"
+                    >
+                      <i className="fa fa-eye"></i>
+                    </button>
+                    <div className="w-px h-4 bg-gray-200 self-center"></div>
+                    <Link to={`/roads/edit/${road.id}`} className="text-amber-600 hover:text-amber-800" title="تعديل">
                       <i className="fa fa-edit"></i>
                     </Link>
-                    <div className="w-full border-t border-gray-300"></div>
+                    <div className="w-px h-4 bg-gray-200 self-center"></div>
                     <button 
                       onClick={() => handleDelete(road.id)}
                       className="text-red-500 hover:text-red-700" 
@@ -208,6 +309,13 @@ const RoadsList: React.FC = () => {
         <MapModal 
           road={selectedRoadForMap} 
           onClose={() => setSelectedRoadForMap(null)} 
+        />
+      )}
+
+      {selectedRoadForDetails && (
+        <RoadDetailsModal 
+          road={selectedRoadForDetails} 
+          onClose={() => setSelectedRoadForDetails(null)} 
         />
       )}
     </div>

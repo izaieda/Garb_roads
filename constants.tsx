@@ -51,7 +51,19 @@ export const MOCK_ROADS: Road[] = [
     endN: "28.3507880",
     mapLink: "https://www.google.com/maps",
     length: 102,
-    notes: ""
+    notes: "",
+    startAreaKm: 0,
+    endAreaKm: 102,
+    garbId: 1001,
+    numericSpeed: 100,
+    pavementType: 'اسفلتي',
+    jurisdiction: 'الهيئة العامة للطرق والكباري',
+    roadWidth: 24,
+    medianWidth: 4,
+    sidewalkWidth: 2,
+    separatorType: 'جزيرة',
+    bufferLimit: 50,
+    lanesCount: 3
   },
   {
     id: 184,
@@ -69,7 +81,19 @@ export const MOCK_ROADS: Road[] = [
     endN: "29.210299",
     mapLink: "https://www.google.com/maps",
     length: 290,
-    notes: ""
+    notes: "",
+    startAreaKm: 0,
+    endAreaKm: 290,
+    garbId: 2005,
+    numericSpeed: 90,
+    pavementType: 'اسفلتي',
+    jurisdiction: 'الهيئة العامة للطرق والكباري',
+    roadWidth: 12,
+    medianWidth: 0,
+    sidewalkWidth: 1.5,
+    separatorType: 'بدون',
+    bufferLimit: 30,
+    lanesCount: 2
   }
 ];
 
@@ -82,7 +106,12 @@ export const MOCK_MAINTENANCE_RECORDS: MaintenanceRecord[] = [
     type: "رفع كفاءة",
     cost: 108300000,
     company: "النيل العامة للانشاء والطرق",
-    notes: "تم نهو المشروع"
+    notes: "تم نهو المشروع",
+    status: "تم التختيم",
+    fundingType: "استثمار",
+    financialYear: "2021/2022",
+    executedWorksAmount: 108300000,
+    executionPercentage: 100
   },
   {
     id: 2,
@@ -92,6 +121,11 @@ export const MOCK_MAINTENANCE_RECORDS: MaintenanceRecord[] = [
     type: "جسيمة",
     cost: 223316446,
     company: "السلام انترناشونال للمقاولات",
-    notes: "اتجاه راس غارب"
+    notes: "اتجاه راس غارب",
+    status: "جاري التنفيذ",
+    fundingType: "صيانة",
+    financialYear: "2021/2022",
+    executedWorksAmount: 111658223,
+    executionPercentage: 50
   }
 ];
