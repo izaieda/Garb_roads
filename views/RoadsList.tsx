@@ -10,26 +10,26 @@ const RoadDetailsModal: React.FC<{ road: Road, onClose: () => void }> = ({ road,
   const DetailRow = ({ label, value, fullWidth = false }: { label: string, value: any, fullWidth?: boolean }) => (
     <div className={`${fullWidth ? 'col-span-full' : 'col-span-1'} flex flex-col border-b border-gray-100 pb-2`}>
       <span className="text-[10px] text-gray-400 font-bold mb-1">{label}</span>
-      <span className="text-sm text-gray-800 font-medium">{value ?? '-'}</span>
+      <span className="text-xs sm:text-sm text-gray-800 font-medium">{value ?? '-'}</span>
     </div>
   );
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="bg-white w-full max-w-4xl rounded-sm shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-        <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-[#2A3F54] text-white">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4 animate-in fade-in duration-200">
+      <div className="bg-white w-full max-w-4xl rounded-sm shadow-2xl overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]">
+        <div className="p-3 sm:p-4 border-b border-gray-200 flex justify-between items-center bg-[#2A3F54] text-white">
           <div className="flex items-center gap-3">
-            <i className="fa fa-info-circle text-emerald-400 text-xl"></i>
-            <h3 className="font-bold text-lg tracking-wide">تفاصيل بيانات الطريق: {road.name}</h3>
+            <i className="fa fa-info-circle text-emerald-400 text-lg sm:text-xl"></i>
+            <h3 className="font-bold text-sm sm:text-lg tracking-wide">تفاصيل بيانات الطريق: {road.name}</h3>
           </div>
           <button onClick={onClose} className="hover:rotate-90 transition-transform duration-200 text-2xl font-bold">&times;</button>
         </div>
         
-        <div className="flex-1 overflow-y-auto p-6 space-y-8">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
           {/* Section: Basic & Admin */}
           <section>
-            <h4 className="text-xs font-bold text-blue-700 mb-4 border-r-4 border-blue-600 pr-2 uppercase">البيانات الإدارية</h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <h4 className="text-[10px] sm:text-xs font-bold text-blue-700 mb-3 sm:mb-4 border-r-4 border-blue-600 pr-2 uppercase">البيانات الإدارية</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
               <DetailRow label="اسم الطريق" value={road.name} />
               <DetailRow label="المنطقة" value={road.department} />
               <DetailRow label="المحافظة" value={road.governorate} />
@@ -40,9 +40,9 @@ const RoadDetailsModal: React.FC<{ road: Road, onClose: () => void }> = ({ road,
           </section>
 
           {/* Section: Infrastructure */}
-          <section className="bg-gray-50 p-4 rounded-sm border border-gray-100">
-            <h4 className="text-xs font-bold text-blue-700 mb-4 border-r-4 border-blue-600 pr-2 uppercase">بيانات البنية التحتية</h4>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <section className="bg-gray-50 p-3 sm:p-4 rounded-sm border border-gray-100">
+            <h4 className="text-[10px] sm:text-xs font-bold text-blue-700 mb-3 sm:mb-4 border-r-4 border-blue-600 pr-2 uppercase">بيانات البنية التحتية</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               <DetailRow label="نوع الطريق" value={road.type} />
               <DetailRow label="تصنيف السرعة" value={road.speed} />
               <DetailRow label="السرعة المقررة" value={road.numericSpeed ? `${road.numericSpeed} كم/س` : '-'} />
@@ -57,8 +57,8 @@ const RoadDetailsModal: React.FC<{ road: Road, onClose: () => void }> = ({ road,
 
           {/* Section: Dimensions */}
           <section>
-            <h4 className="text-xs font-bold text-blue-700 mb-4 border-r-4 border-blue-600 pr-2 uppercase">الأبعاد والمقاييس</h4>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <h4 className="text-[10px] sm:text-xs font-bold text-blue-700 mb-3 sm:mb-4 border-r-4 border-blue-600 pr-2 uppercase">الأبعاد والمقاييس</h4>
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
               <DetailRow label="عرض الطريق (م)" value={road.roadWidth} />
               <DetailRow label="عرض الجزيرة (م)" value={road.medianWidth} />
               <DetailRow label="عرض الرصيف (م)" value={road.sidewalkWidth} />
@@ -67,8 +67,8 @@ const RoadDetailsModal: React.FC<{ road: Road, onClose: () => void }> = ({ road,
           </section>
 
           {/* Section: Location */}
-          <section className="bg-emerald-50/30 p-4 rounded-sm border border-emerald-100/50">
-            <h4 className="text-xs font-bold text-emerald-800 mb-4 border-r-4 border-emerald-600 pr-2 uppercase">الموقع الجغرافي</h4>
+          <section className="bg-emerald-50/30 p-3 sm:p-4 rounded-sm border border-emerald-100/50">
+            <h4 className="text-[10px] sm:text-xs font-bold text-emerald-800 mb-3 sm:mb-4 border-r-4 border-emerald-600 pr-2 uppercase">الموقع الجغرافي</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
               <div className="space-y-3">
                 <DetailRow label="نقطة البداية" value={road.start} />
@@ -84,7 +84,7 @@ const RoadDetailsModal: React.FC<{ road: Road, onClose: () => void }> = ({ road,
                   <DetailRow label="N (نهاية)" value={road.endN} />
                 </div>
               </div>
-              <DetailRow label="رابط جوجل ماب" fullWidth value={<a href={road.mapLink} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline flex items-center gap-2"><i className="fa fa-external-link-alt text-xs"></i> عرض على الخريطة الخارجية</a>} />
+              <DetailRow label="رابط جوجل ماب" fullWidth value={<a href={road.mapLink} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline flex items-center gap-2 text-xs sm:text-sm"><i className="fa fa-external-link-alt text-[10px] sm:text-xs"></i> عرض على الخريطة الخارجية</a>} />
             </div>
           </section>
 
@@ -94,10 +94,10 @@ const RoadDetailsModal: React.FC<{ road: Road, onClose: () => void }> = ({ road,
           </section>
         </div>
         
-        <div className="p-4 bg-gray-50 border-t flex justify-end">
+        <div className="p-3 sm:p-4 bg-gray-50 border-t flex justify-end">
           <button 
             onClick={onClose}
-            className="bg-[#2A3F54] text-white px-8 py-2 text-sm font-bold hover:bg-slate-700 transition-colors"
+            className="bg-[#2A3F54] text-white px-6 sm:px-8 py-2 text-xs sm:text-sm font-bold hover:bg-slate-700 transition-colors"
           >
             إغلاق
           </button>
@@ -152,14 +152,14 @@ const MapModal: React.FC<{ road: Road, onClose: () => void }> = ({ road, onClose
   }, [road]);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white w-full max-w-4xl rounded-lg shadow-xl overflow-hidden flex flex-col h-[80vh]">
-        <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-[#337ab7] text-white">
-          <h3 className="font-bold text-lg">موقع الطريق: {road.name}</h3>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-2 sm:p-4">
+      <div className="bg-white w-full max-w-4xl rounded-lg shadow-xl overflow-hidden flex flex-col h-[70vh] sm:h-[80vh]">
+        <div className="p-3 sm:p-4 border-b border-gray-200 flex justify-between items-center bg-[#337ab7] text-white">
+          <h3 className="font-bold text-sm sm:text-lg">موقع الطريق: {road.name}</h3>
           <button onClick={onClose} className="hover:text-gray-200 text-2xl font-bold">&times;</button>
         </div>
         <div id="map" ref={containerRef} className="flex-1 bg-gray-100"></div>
-        <div className="p-4 bg-gray-50 text-xs text-gray-500 border-t flex justify-between">
+        <div className="p-3 sm:p-4 bg-gray-50 text-[10px] sm:text-xs text-gray-500 border-t flex flex-col sm:flex-row justify-between gap-2">
           <div>البداية: {road.startN}, {road.startE}</div>
           <div>النهاية: {road.endN}, {road.endE}</div>
         </div>
@@ -181,51 +181,52 @@ const RoadsList: React.FC = () => {
   };
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-800">عرض كل الطرق</h2>
-        <Link to="/roads/add" className="bg-[#337ab7] text-white px-4 py-1.5 rounded text-sm hover:bg-blue-700 transition-colors">
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">عرض كل الطرق</h2>
+        <Link to="/roads/add" className="bg-[#337ab7] text-white px-4 py-2 rounded text-sm hover:bg-blue-700 transition-colors w-full sm:w-auto text-center font-bold">
           اضافة طريق
         </Link>
       </div>
 
-      <div className="bg-white p-4 border border-gray-200 mb-6 shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-          <div>
-            <label className="block text-xs font-bold text-gray-600 mb-1">اسم الطريق</label>
+      <div className="bg-white p-4 border border-gray-200 shadow-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] font-bold text-gray-600">اسم الطريق</label>
             <input 
               type="text" 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full border border-gray-300 p-1 text-sm outline-none"
+              className="w-full border border-gray-300 p-2 text-xs sm:text-sm outline-none focus:ring-1 focus:ring-blue-500"
+              placeholder="ابحث بالاسم..."
             />
           </div>
-          <div>
-            <label className="block text-xs font-bold text-gray-600 mb-1">اسم المنطقة</label>
-            <select className="w-full border border-gray-300 p-1 text-sm outline-none">
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] font-bold text-gray-600">اسم المنطقة</label>
+            <select className="w-full border border-gray-300 p-2 text-xs sm:text-sm outline-none focus:ring-1 focus:ring-blue-500">
               <option value="">ادارة الهيئة</option>
               {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
             </select>
           </div>
-          <div>
-            <label className="block text-xs font-bold text-gray-600 mb-1">المحافظة</label>
-            <select className="w-full border border-gray-300 p-1 text-sm outline-none">
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] font-bold text-gray-600">المحافظة</label>
+            <select className="w-full border border-gray-300 p-2 text-xs sm:text-sm outline-none focus:ring-1 focus:ring-blue-500">
               <option value="">اختار المحافظة</option>
               {MOCK_GOVERNORATES.map(g => <option key={g.id} value={g.name}>{g.name}</option>)}
             </select>
           </div>
-          <button className="bg-gray-100 border border-gray-300 px-6 py-1 hover:bg-gray-200 text-sm transition-colors">
-            بحث
+          <button className="bg-gray-100 border border-gray-300 py-2 hover:bg-gray-200 text-xs sm:text-sm transition-colors font-bold w-full">
+            تطبيق البحث
           </button>
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-white border border-gray-200 shadow-sm">
-        <table className="w-full text-center border-collapse">
+      <div className="overflow-x-auto bg-white border border-gray-200 shadow-sm custom-scrollbar">
+        <table className="w-full text-center border-collapse min-w-[1200px]">
           <thead>
-            <tr className="bg-[#337ab7] text-white text-[10px] font-bold">
+            <tr className="bg-[#337ab7] text-white text-[10px] font-bold whitespace-nowrap">
               <th className="p-2 border border-gray-400">م</th>
-              <th className="p-2 border border-gray-400">اسم الطريق</th>
+              <th className="p-2 border border-gray-400 text-right pr-4">اسم الطريق</th>
               <th className="p-2 border border-gray-400">اسم المنطقة</th>
               <th className="p-2 border border-gray-400">المحافظة</th>
               <th className="p-2 border border-gray-400">نوع الطريق</th>
@@ -243,13 +244,13 @@ const RoadsList: React.FC = () => {
           </thead>
           <tbody className="text-[10px] text-gray-700">
             {roads.map((road, index) => (
-              <tr key={road.id} className="hover:bg-gray-50 even:bg-gray-50">
+              <tr key={road.id} className="hover:bg-gray-50 even:bg-gray-50/30">
                 <td className="p-2 border border-gray-200">{index + 1}</td>
-                <td className="p-2 border border-gray-200 font-bold whitespace-nowrap">{road.name}</td>
+                <td className="p-2 border border-gray-200 font-bold whitespace-nowrap text-right pr-4">{road.name}</td>
                 <td className="p-2 border border-gray-200 whitespace-nowrap">{road.department}</td>
                 <td className="p-2 border border-gray-200">{road.governorate}</td>
                 <td className="p-2 border border-gray-200">{road.type}</td>
-                <td className="p-2 border border-gray-200 font-bold">{road.length}</td>
+                <td className="p-2 border border-gray-200 font-bold text-emerald-600">{road.length}</td>
                 <td className="p-2 border border-gray-200">{road.startAreaKm ?? '-'}</td>
                 <td className="p-2 border border-gray-200">{road.endAreaKm ?? '-'}</td>
                 <td className="p-2 border border-gray-200">{road.garbId ?? '-'}</td>
@@ -260,29 +261,29 @@ const RoadsList: React.FC = () => {
                 <td className="p-2 border border-gray-200">
                   <button 
                     onClick={() => setSelectedRoadForMap(road)}
-                    className="bg-emerald-500 text-white p-1 rounded hover:bg-emerald-600 transition-colors shadow-sm"
+                    className="bg-emerald-500 text-white p-1.5 rounded hover:bg-emerald-600 transition-colors shadow-sm"
                     title="عرض الموقع على الخريطة"
                   >
                     <i className="fa fa-map-marked-alt"></i>
                   </button>
                 </td>
                 <td className="p-2 border border-gray-200">
-                  <div className="flex gap-2 justify-center">
+                  <div className="flex gap-2 justify-center items-center">
                     <button 
                       onClick={() => setSelectedRoadForDetails(road)}
-                      className="text-blue-500 hover:text-blue-700 transition-colors" 
+                      className="text-blue-500 hover:text-blue-700 transition-colors p-1" 
                       title="عرض التفاصيل الكاملة"
                     >
                       <i className="fa fa-eye"></i>
                     </button>
-                    <div className="w-px h-4 bg-gray-200 self-center"></div>
-                    <Link to={`/roads/edit/${road.id}`} className="text-amber-600 hover:text-amber-800" title="تعديل">
+                    <div className="w-px h-3 bg-gray-200"></div>
+                    <Link to={`/roads/edit/${road.id}`} className="text-amber-600 hover:text-amber-800 p-1" title="تعديل">
                       <i className="fa fa-edit"></i>
                     </Link>
-                    <div className="w-px h-4 bg-gray-200 self-center"></div>
+                    <div className="w-px h-3 bg-gray-200"></div>
                     <button 
                       onClick={() => handleDelete(road.id)}
-                      className="text-red-500 hover:text-red-700" 
+                      className="text-red-500 hover:text-red-700 p-1" 
                       title="حذف"
                     >
                       <i className="fa fa-trash"></i>
@@ -295,13 +296,16 @@ const RoadsList: React.FC = () => {
         </table>
       </div>
 
-      <div className="mt-6 flex justify-end">
+      <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="text-xs text-gray-500">
+          عرض 1 إلى {roads.length} من أصل {roads.length} طريق
+        </div>
         <nav className="flex items-center gap-1">
-          <button className="px-3 py-1 border border-gray-300 bg-white hover:bg-gray-100 disabled:opacity-50 text-sm">السابق</button>
-          <button className="px-3 py-1 border border-[#337ab7] bg-[#337ab7] text-white text-sm">1</button>
-          <button className="px-3 py-1 border border-gray-300 bg-white hover:bg-gray-100 text-sm">2</button>
-          <button className="px-3 py-1 border border-gray-300 bg-white hover:bg-gray-100 text-sm">3</button>
-          <button className="px-3 py-1 border border-gray-300 bg-white hover:bg-gray-100 text-sm">التالي</button>
+          <button className="px-3 py-1.5 border border-gray-300 bg-white hover:bg-gray-100 disabled:opacity-50 text-[10px] sm:text-xs">السابق</button>
+          <button className="px-3 py-1.5 border border-[#337ab7] bg-[#337ab7] text-white text-[10px] sm:text-xs font-bold">1</button>
+          <button className="px-3 py-1.5 border border-gray-300 bg-white hover:bg-gray-100 text-[10px] sm:text-xs">2</button>
+          <button className="px-3 py-1.5 border border-gray-300 bg-white hover:bg-gray-100 text-[10px] sm:text-xs">3</button>
+          <button className="px-3 py-1.5 border border-gray-300 bg-white hover:bg-gray-100 text-[10px] sm:text-xs">التالي</button>
         </nav>
       </div>
 

@@ -7,6 +7,8 @@ import RoadsList from './views/RoadsList';
 import AddRoad from './views/AddRoad';
 import MaintenanceList from './views/MaintenanceList';
 import Statistics from './views/Statistics';
+import CompanyList from './views/CompanyList';
+import AddCompany from './views/AddCompany';
 
 // Placeholder for missing views to ensure the app runs
 const DataList = ({ title }: { title: string }) => (
@@ -34,6 +36,11 @@ const App: React.FC = () => {
           <Route path="/maintenance">
             <Route path="all" element={<DataList title="كل الصيانة" />} />
             <Route path="add" element={<MaintenanceList />} />
+          </Route>
+
+          <Route path="/companies">
+            <Route path="all" element={<CompanyList />} />
+            <Route path="add" element={<AddCompany />} />
           </Route>
 
           <Route path="/statistics" element={<Statistics />} />

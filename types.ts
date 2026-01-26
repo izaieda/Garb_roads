@@ -32,6 +32,11 @@ export interface Road {
   lanesCount?: number;
 }
 
+export interface Company {
+  id: number;
+  name: string;
+}
+
 export interface MaintenanceRecord {
   id: number;
   roadId: number;

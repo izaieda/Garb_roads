@@ -2,10 +2,16 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({
     roads: true,
     maintenance: false,
+    companies: false,
     data: false,
     users: false
   });
@@ -20,6 +26,7 @@ const Sidebar: React.FC = () => {
     <li>
       <Link 
         to={to} 
+        onClick={() => { if (window.innerWidth < 768) onClose(); }}
         className={`flex items-center gap-3 px-6 py-3 text-sm transition-colors ${location.pathname === to ? 'bg-white/10 text-emerald-400' : 'text-gray-300 hover:text-white hover:bg-white/5'}`}
       >
         <i className={`fa ${icon} w-5`}></i>
@@ -29,14 +36,20 @@ const Sidebar: React.FC = () => {
   );
 
   return (
-    <div className="w-64 bg-[#2A3F54] min-h-screen text-white hidden md:block shrink-0">
-      <div className="p-4 border-b border-white/10">
+    <div className={`
+      fixed md:sticky top-0 right-0 h-screen w-64 bg-[#2A3F54] text-white z-40 shrink-0 transition-transform duration-300 ease-in-out
+      ${isOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}
+    `}>
+      <div className="p-4 border-b border-white/10 flex justify-between items-center">
         <Link to="/" className="flex items-center gap-3">
           <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
             <i className="fa fa-road text-white"></i>
           </div>
           <span className="text-xl font-bold tracking-tight">الرئيسية</span>
         </Link>
+        <button onClick={onClose} className="md:hidden text-gray-400 hover:text-white">
+          <i className="fa fa-times text-xl"></i>
+        </button>
       </div>
 
       <div className="p-4 flex items-center gap-3 bg-black/10">
@@ -46,7 +59,7 @@ const Sidebar: React.FC = () => {
         </div>
       </div>
 
-      <nav className="mt-4">
+      <nav className="mt-4 overflow-y-auto max-h-[calc(100vh-160px)] custom-scrollbar">
         <div className="px-6 py-2 text-[10px] uppercase font-bold text-gray-400 tracking-wider">
           القائمة الاساسية
         </div>
@@ -92,10 +105,31 @@ const Sidebar: React.FC = () => {
             )}
           </li>
 
+          {/* Companies */}
+          <li>
+            <button 
+              onClick={() => toggleMenu('companies')}
+              className="w-full flex items-center justify-between px-6 py-3 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <i className="fa fa-building w-5"></i>
+                <span>الشركات</span>
+              </div>
+              <i className={`fa fa-chevron-${openMenus.companies ? 'up' : 'down'} text-[10px]`}></i>
+            </button>
+            {openMenus.companies && (
+              <ul className="bg-black/20 text-xs">
+                <MenuItem to="/companies/all" label="كل الشركات" icon="fa-list-ul" />
+                <MenuItem to="/companies/add" label="اضافة شركة" icon="fa-plus-circle" />
+              </ul>
+            )}
+          </li>
+
           {/* Statistics */}
           <li>
             <Link 
               to="/statistics" 
+              onClick={() => { if (window.innerWidth < 768) onClose(); }}
               className={`flex items-center gap-3 px-6 py-3 text-sm transition-colors ${location.pathname === '/statistics' ? 'bg-white/10 text-emerald-400' : 'text-gray-300 hover:text-white hover:bg-white/5'}`}
             >
               <i className="fa fa-chart-line w-5"></i>

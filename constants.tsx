@@ -1,5 +1,5 @@
 
-import { Road, Governorate, MaintenanceType, User, MaintenanceRecord } from './types';
+import { Road, Governorate, MaintenanceType, User, MaintenanceRecord, Company } from './types';
 
 export const DEPARTMENTS = [
   "ادارة الهيئة",
@@ -25,6 +25,14 @@ export const MOCK_GOVERNORATES: Governorate[] = [
   { id: 26, name: "المنيا", areas: ["مغاغة", "بنى مزار", "مركز العدوة", "مطاى", "سمالوط", "أبو قرقاص", "ملوى", "دير مواس", "مركز المنيا"] },
   { id: 6, name: "البحر الأحمر", areas: ["رأس غارب", "الغردقة", "القصير", "سفاجا", "مرسى علم", "شلاتين"] },
   { id: 24, name: "مرسى مطروح", areas: ["مركز الحمام", "العلمين", "الضبعة", "مرسى مطروح", "النجيلة", "برانى", "السلوم", "سيوة"] }
+];
+
+export const MOCK_COMPANIES: Company[] = [
+  { id: 1, name: "شركة النيل للطرق الصحراوية" },
+  { id: 2, name: "شركة مصرية لمستلزمات الطرق" },
+  { id: 3, name: "النيل العامة للانشاء والطرق" },
+  { id: 4, name: "السلام انترناشونال للمقاولات" },
+  { id: 5, name: "الشركة القابضة لمشروعات الطرق" }
 ];
 
 export const MOCK_MAINTENANCE_TYPES: MaintenanceType[] = [
